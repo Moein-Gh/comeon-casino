@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { login } from "@/lib/api";
-import { storePlayer } from "@/lib/player-storage";
+import { login as loginRequest } from "@/lib/api";
+import { usePlayer } from "@/lib/player-context";
 import { TextField } from "@/components/ui/TextField";
 import { Button } from "@/components/ui/Button";
 
@@ -19,6 +19,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const router = useRouter();
+  const { login } = usePlayer();
   const [formError, setFormError] = useState<string | null>(null);
   const {
     register,
@@ -30,12 +31,12 @@ export function LoginForm() {
 
   async function onSubmit(values: LoginFormValues) {
     setFormError(null);
-    const response = await login(values.username, values.password);
+    const response = await loginRequest(values.username, values.password);
     if (response.status === "fail") {
       setFormError(response.error);
       return;
     }
-    storePlayer(response.player);
+    login(values.username, response.player);
     router.push("/games");
   }
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { PlayerProvider } from "@/lib/player-context";
 import "./globals.css";
 
 const themeInitScript = `
@@ -42,7 +43,9 @@ export default function RootLayout({
           {themeInitScript}
         </Script>
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <PlayerProvider>{children}</PlayerProvider>
+      </body>
     </html>
   );
 }

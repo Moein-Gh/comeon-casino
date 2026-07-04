@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import { Player } from "@/lib/types";
-import { clearStoredPlayer, getStoredPlayer } from "@/lib/player-storage";
+import { usePlayer } from "@/lib/player-context";
 
 const placeholderPlayer: Player = {
   name: "Guest",
@@ -44,17 +44,10 @@ function Avatar({ player, className }: { player: Player; className: string }) {
 
 export function ProfileMenu() {
   const router = useRouter();
+  const { player, logout } = usePlayer();
   const [open, setOpen] = useState(false);
-  // Starts null to match the server-rendered markup; synced to the real
-  // sessionStorage value post-mount so hydration never has to compare
-  // against browser-only state.
-  const [player, setPlayer] = useState<Player | null>(null);
+  const [loggingOut, setLoggingOut] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- bridges SSR (no sessionStorage) with the real client-only value
-    setPlayer(getStoredPlayer());
-  }, []);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -69,8 +62,9 @@ export function ProfileMenu() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  function handleLogout() {
-    clearStoredPlayer();
+  async function handleLogout() {
+    setLoggingOut(true);
+    await logout();
     router.push("/login");
   }
 
@@ -111,7 +105,8 @@ export function ProfileMenu() {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="flex w-full items-center gap-2 rounded-(--radius) px-3 py-2 text-sm font-medium text-red-500 transition-colors hover:bg-red-500/10"
+                disabled={loggingOut}
+                className="flex w-full items-center gap-2 rounded-(--radius) px-3 py-2 text-sm font-medium text-red-500 transition-colors hover:bg-red-500/10 disabled:opacity-60"
               >
                 <svg
                   viewBox="0 0 24 24"
@@ -126,7 +121,7 @@ export function ProfileMenu() {
                     d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4m6 14 5-5-5-5m5 5H9"
                   />
                 </svg>
-                Log out
+                {loggingOut ? "Logging out…" : "Log out"}
               </button>
             </div>
           </motion.div>

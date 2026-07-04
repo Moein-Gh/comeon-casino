@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Category, Game } from "@/lib/types";
+import { getStoredView, storeView } from "@/lib/view-preference";
 import { SearchBar } from "./SearchBar";
 import { CategoryFilter } from "./CategoryFilter";
 import { GameCard } from "./GameCard";
@@ -17,6 +18,19 @@ export function GamesBrowser({ games, categories }: GamesBrowserProps) {
   const [search, setSearch] = useState("");
   const [categoryId, setCategoryId] = useState<number | null>(null);
   const [view, setView] = useState<"grid" | "list">("grid");
+
+  useEffect(() => {
+    const stored = getStoredView();
+    if (stored) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- bridges SSR default with the real localStorage preference
+      setView(stored);
+    }
+  }, []);
+
+  function handleViewChange(next: "grid" | "list") {
+    setView(next);
+    storeView(next);
+  }
 
   const filteredGames = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -38,7 +52,7 @@ export function GamesBrowser({ games, categories }: GamesBrowserProps) {
         />
         <div className="flex w-full items-center justify-center gap-2 sm:w-auto sm:justify-end">
           <SearchBar value={search} onChange={setSearch} />
-          <ViewToggle view={view} onChange={setView} />
+          <ViewToggle view={view} onChange={handleViewChange} />
         </div>
       </div>
 

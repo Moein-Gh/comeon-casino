@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { ViewTransition, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
@@ -54,18 +54,22 @@ export function GameCard({ game, categories, layout = "grid" }: GameCardProps) {
             className="flex min-w-0 flex-1 items-center gap-3 text-left"
           >
             <div className="relative size-14 shrink-0 overflow-hidden rounded-(--radius) bg-surface-sunken">
-              <Image
-                src={`/${game.icon}`}
-                alt={game.name}
-                fill
-                sizes="56px"
-                className="object-contain p-2"
-              />
+              <ViewTransition name={`game-icon-${game.code}`} share="morph">
+                <Image
+                  src={`/${game.icon}`}
+                  alt={game.name}
+                  fill
+                  unoptimized
+                  className="object-contain p-2"
+                />
+              </ViewTransition>
             </div>
             <div className="min-w-0 flex-1">
-              <h3 className="truncate font-semibold leading-tight tracking-tight">
-                {game.name}
-              </h3>
+              <ViewTransition name={`game-title-${game.code}`} share="morph">
+                <h3 className="truncate font-semibold leading-tight tracking-tight">
+                  {game.name}
+                </h3>
+              </ViewTransition>
               <div className="mt-1">{categoryTags}</div>
             </div>
             <motion.span
@@ -110,18 +114,22 @@ export function GameCard({ game, categories, layout = "grid" }: GameCardProps) {
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
         className="relative aspect-4/3 w-full overflow-hidden bg-surface-sunken"
       >
-        <Image
-          src={`/${game.icon}`}
-          alt={game.name}
-          fill
-          sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw"
-          className="object-contain p-6"
-        />
+        <ViewTransition name={`game-icon-${game.code}`} share="morph">
+          <Image
+            src={`/${game.icon}`}
+            alt={game.name}
+            fill
+            unoptimized
+            className="object-contain p-6"
+          />
+        </ViewTransition>
       </motion.div>
       <div className="flex flex-1 flex-col gap-2.5 p-4">
-        <h3 className="font-semibold leading-tight tracking-tight">
-          {game.name}
-        </h3>
+        <ViewTransition name={`game-title-${game.code}`} share="morph">
+          <h3 className="font-semibold leading-tight tracking-tight">
+            {game.name}
+          </h3>
+        </ViewTransition>
         {categoryTags}
         <p className="line-clamp-2 text-sm leading-relaxed text-muted">
           {game.description}
