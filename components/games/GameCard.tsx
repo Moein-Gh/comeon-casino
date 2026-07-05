@@ -109,21 +109,27 @@ export function GameCard({ game, categories, layout = "grid" }: GameCardProps) {
 
   return (
     <div className="flex flex-col overflow-hidden rounded-(--radius) border border-border bg-surface shadow-md">
-      <motion.div
-        whileHover={{ scale: 1.04 }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className="relative aspect-4/3 w-full overflow-hidden bg-surface-sunken"
+      <Link
+        href={`/games/${game.code}`}
+        aria-label={`Play ${game.name}`}
+        className="block"
       >
-        <ViewTransition name={`game-icon-${game.code}`} share="morph">
-          <Image
-            src={`/${game.icon}`}
-            alt={game.name}
-            fill
-            unoptimized
-            className="object-contain p-6"
-          />
-        </ViewTransition>
-      </motion.div>
+        <motion.div
+          whileHover={{ scale: 1.04 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          className="relative aspect-4/3 w-full overflow-hidden bg-surface-sunken"
+        >
+          <ViewTransition name={`game-icon-${game.code}`} share="morph">
+            <Image
+              src={`/${game.icon}`}
+              alt={game.name}
+              fill
+              unoptimized
+              className="object-contain p-6"
+            />
+          </ViewTransition>
+        </motion.div>
+      </Link>
       <div className="flex flex-1 flex-col gap-2.5 p-4">
         <ViewTransition name={`game-title-${game.code}`} share="morph">
           <h3 className="font-semibold leading-tight tracking-tight">

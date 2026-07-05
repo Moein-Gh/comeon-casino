@@ -10,7 +10,7 @@ import { ThemeToggleButton } from "@/components/layout/ThemeToggleButton";
 
 export default function GamePage() {
   const { code } = useParams<{ code: string }>();
-  const { games, categories, loadError } = useGamesData();
+  const { games, categories, loading, loadError } = useGamesData();
   const game = games.find((candidate) => candidate.code === code) ?? null;
 
   const backLink = (
@@ -36,9 +36,24 @@ export default function GamePage() {
           </div>
         </div>
         <p className="rounded-(--radius) border border-border bg-surface p-6 text-center text-muted shadow-sm">
-          We couldn&apos;t reach the games service. Make sure the mock API
+          We couldn&apos;t reach the games service. Make sure the API
           server is running and try again.
         </p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between">
+          {backLink}
+          <div className="flex items-center gap-3">
+            <ThemeToggleButton />
+            <ProfileMenu />
+          </div>
+        </div>
+        <p className="py-16 text-center text-muted">Loading game…</p>
       </div>
     );
   }

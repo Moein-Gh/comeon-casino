@@ -66,6 +66,7 @@ export function SearchBar({
   return (
     <motion.div
       ref={containerRef}
+      initial={false}
       animate={{ width: open ? 240 : 36 }}
       transition={{ duration: 0.25, ease: "easeInOut" }}
       className="flex h-9 shrink-0 items-center overflow-hidden rounded-(--radius) border border-border bg-surface"
