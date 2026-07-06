@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { AnimatePresence, motion } from "motion/react";
-import { Player } from "@/lib/types";
 import { usePlayer } from "@/lib/player-context";
+import { Player } from "@/lib/types";
+import { AnimatePresence, motion } from "motion/react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 const placeholderPlayer: Player = {
   name: "Guest",
@@ -22,7 +22,9 @@ const personIcon = (
 function Avatar({ player, className }: { player: Player; className: string }) {
   if (player.avatar) {
     return (
-      <span className={`relative block shrink-0 overflow-hidden rounded-full bg-surface-sunken ${className}`}>
+      <span
+        className={`relative block shrink-0 overflow-hidden rounded-full bg-surface-sunken ${className}`}
+      >
         <Image
           src={`/${player.avatar}`}
           alt={player.name}
@@ -77,7 +79,7 @@ export function ProfileMenu() {
         aria-label="Open profile menu"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
-        className="rounded-full transition-transform hover:scale-105"
+        className="flex items-center justify-center rounded-full p-0 transition-transform hover:scale-105"
       >
         <Avatar player={displayPlayer} className="size-10" />
       </button>

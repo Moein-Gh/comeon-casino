@@ -2,19 +2,16 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { logout as apiLogout } from "./api";
-import { Player } from "./types";
 import {
   clearStoredSession,
   getStoredSession,
-  storeSession,
   StoredSession,
+  storeSession,
 } from "./player-storage";
+import { Player } from "./types";
 
 type PlayerContextValue = {
   player: Player | null;
-  // False until the sessionStorage read on mount has completed; lets
-  // consumers (like the games auth guard) avoid redirecting on the very
-  // first client render, before we know whether a session exists.
   hydrated: boolean;
   login: (username: string, player: Player) => void;
   logout: () => Promise<void>;

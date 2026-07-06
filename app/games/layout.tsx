@@ -1,5 +1,5 @@
-import { GamesProvider } from "@/lib/games-context";
 import { GamesGuard } from "@/components/layout/GamesGuard";
+import { GamesProvider } from "@/lib/games-context";
 
 export default function GamesLayout({
   children,
